@@ -2,7 +2,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
 <body>
     <referenceContainer name="before.body.end">
-        <block class="Godogi\LoginSidebar\Block\Sidebar" name="login_sidebar"  template="Godogi_LoginSidebar::sidebar.phtml">
+        <block class="Godogi\LoginSidebar\Block\Sidebar" name="login_sidebar"  template="Godogi_LoginSidebar::sidebar.phtml" cacheable="false">
         	<block class="Magento\Customer\Block\Form\Login" name="customer_login" template="Godogi_LoginSidebar::login.phtml">
 				<container name="form.additional.info.login" as="form_additional_info_login"/>
 			</block>
@@ -12,6 +12,7 @@
 			</block>
         </block>
     </referenceContainer>
+    <!--
     <referenceContainer name="form.additional.info.login">
         <block class="Magento\Framework\View\Element\Template" name="form_additional_info_customer_login" template="Magento_Customer::additionalinfocustomer.phtml"/>
     </referenceContainer>
@@ -47,5 +48,6 @@
     <referenceBlock name="head.components">
         <block class="Magento\Framework\View\Element\Js\Components" name="captcha_page_head_components" template="Magento_Captcha::js/components.phtml"/>
     </referenceBlock>
+    -->
   </body>
 </page>
