@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<body>
+    <referenceContainer name="before.body.end">
+        <block class="Godogi\LoginSidebar\Block\Sidebar" name="login_sidebar"  template="Godogi_LoginSidebar::sidebar.phtml">
+        	<block class="Magento\Customer\Block\Form\Login" name="customer_login" template="Godogi_LoginSidebar::login.phtml">
+				<container name="form.additional.info.login" as="form_additional_info_login"/>
+			</block>
+        	<block class="Magento\Customer\Block\Form\Login\Info" name="customer_new" template="Godogi_LoginSidebar::new.phtml"/>
+        	<block class="Magento\Customer\Block\Account\Forgotpassword" name="customer_forgot" template="Godogi_LoginSidebar::forgot.phtml">
+				<container name="form.additional.info.forgot" as="form_additional_info_forgot"/>
+			</block>
+        </block>
+    </referenceContainer>
+    <referenceContainer name="form.additional.info.login">
+        <block class="Magento\Framework\View\Element\Template" name="form_additional_info_customer_login" template="Magento_Customer::additionalinfocustomer.phtml"/>
+    </referenceContainer>
+    <referenceContainer name="form.additional.info.forgot">
+        <block class="Magento\Framework\View\Element\Template" name="form_additional_info_customer_forgot" template="Magento_Customer::additionalinfocustomer.phtml"/>
+    </referenceContainer>
+    <referenceContainer name="form.additional.info.login">
+        <block class="Magento\Captcha\Block\Captcha" name="captcha" after="-" cacheable="false">
+            <action method="setFormId">
+                <argument name="formId" xsi:type="string">user_login</argument>
+            </action>
+            <action method="setImgWidth">
+                <argument name="width" xsi:type="string">230</argument>
+            </action>
+            <action method="setImgHeight">
+                <argument name="width" xsi:type="string">50</argument>
+            </action>
+        </block>
+    </referenceContainer>
+    <referenceContainer name="form.additional.info.forgot">
+        <block class="Magento\Captcha\Block\Captcha" name="captcha.forgot" after="-" cacheable="false">
+            <action method="setFormId">
+                <argument name="formId" xsi:type="string">user_forgotpassword</argument>
+            </action>
+            <action method="setImgWidth">
+                <argument name="width" xsi:type="string">230</argument>
+            </action>
+            <action method="setImgHeight">
+                <argument name="width" xsi:type="string">50</argument>
+            </action>
+        </block>
+    </referenceContainer>
+    <referenceBlock name="head.components">
+        <block class="Magento\Framework\View\Element\Js\Components" name="captcha_page_head_components" template="Magento_Captcha::js/components.phtml"/>
+    </referenceBlock>
+  </body>
+</page>

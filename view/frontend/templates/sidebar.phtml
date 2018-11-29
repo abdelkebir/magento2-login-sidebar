@@ -1,0 +1,177 @@
+<div id="overlay"></div>
+<div id="sidebar">
+	<ul class="tabs">
+		<li class="link tab-register">Register</li>
+		<li class="link tab-login active">Sign in</li>
+	</ul>
+	<div class="bd-register">
+		<?php  echo $this->getChildHtml('customer_new'); ?>
+	</div>
+	<div class="bd-login active">
+		<?php  echo $this->getChildHtml('customer_login'); ?>
+	</div>
+	<div class="bd-forgot">
+		<?php  echo $this->getChildHtml('customer_forgot'); ?>
+	</div>
+</div>
+<style type="text/css">
+#sidebar {
+	position: fixed;
+	width: 300px;
+	z-index: 1000000;
+	background-color: #ededed;
+	right: -300px;
+	height: 100%;
+	-webkit-transition: all 0.5s ease;
+  	-moz-transition: all 0.5s ease;
+  	-o-transition: all 0.5s ease;
+  	-ms-transition: all 0.5s ease;
+  	transition: all 0.5s ease;
+}
+#overlay {
+	background-color: rgba(0,0,0,0.8);
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 100000;
+	display: none;
+}
+#sidebar.active{
+	right: 0px;
+	
+}
+#overlay.active{
+	display: block;
+}
+#sidebar .tabs {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+#sidebar .tabs .link {
+	display: inline-block;
+	width: 50%;
+	text-align: center;
+	padding: 10px 0;
+	margin: 0;
+	border-top: 6px solid #c9cacb;
+	font-size: 20px;
+	background-color: #c9cacb;
+	cursor: pointer;
+}
+#sidebar .tabs .link:hover {
+	background-color: #d6d7d8;
+}
+#sidebar .tabs .link:nth-child(1) {
+	float: left;
+}
+#sidebar .tabs .link.active {
+	border-color: #1af;
+	background-color: #ededed;
+	cursor: default;
+}
+#sidebar .tabs .link.active:hover{
+	background-color: #ededed;
+}
+#sidebar .bd-register{
+	padding: 20px;
+	display: none;
+}
+#sidebar .bd-register.active{
+	display: block;
+}
+#sidebar .bd-login{
+	padding: 20px;
+	display: none;
+}
+#sidebar .bd-login.active{
+	display: block;
+}
+#sidebar .bd-forgot{
+	padding: 20px;
+	display: none;
+}
+#sidebar .bd-forgot.active{
+	display: block;
+}
+#sidebar .error-message {
+	color: #f26522;
+	margin-bottom: 20px;
+	font-size: 14px;
+	font-weight: 600;
+}
+body.sidebar-open {
+	overflow: hidden;
+}
+</style>
+<script type="text/javascript">
+require(['jquery'], function($){
+	var formSubmitted = false;
+  	$( ".authorization-link a" ).click(function( event ) {
+	  	event.preventDefault();
+	  	$('#sidebar').addClass('active');
+	  	$('#overlay').addClass('active');
+	  	$('body').addClass('sidebar-open');
+	});
+	$( "#overlay" ).click(function( event ) {
+	  	$('#sidebar').removeClass('active');
+	  	$('#overlay').removeClass('active');
+	  	$('body').removeClass('sidebar-open');
+	});
+
+
+	$("#sidebar .tab-register").click(function( event ) {
+	  	var currentElement = $(this);
+	  	if(!currentElement.hasClass('active')){
+	  		currentElement.addClass('active');
+	  		$("#sidebar .tab-login").removeClass('active');
+	  		$('.bd-register').show();
+	  		$('.bd-login').hide();
+	  		$('.bd-forgot').hide();
+	  	}
+	});
+	$("#sidebar .tab-login").click(function( event ) {
+	  	var currentElement = $(this);
+	  	if(!currentElement.hasClass('active')){
+	  		currentElement.addClass('active');
+			$("#sidebar .tab-register").removeClass('active');
+
+	  		$('.bd-login').show();
+	  		$('.bd-register').hide();
+	  		$('.bd-forgot').hide();
+	  	}
+	});
+	$( ".actions-toolbar .secondary a.action.remind" ).click(function( event ) {
+	  	event.preventDefault();
+	  	$("#sidebar .tab-register").removeClass('active');
+	  	$("#sidebar .tab-login").removeClass('active');
+	  	$('.bd-register').hide();
+	  	$('.bd-login').hide();
+	  	$('.bd-forgot').show();
+	});
+	$("#login-form").submit(function(e) {
+		if(formSubmitted){
+		} else {
+			e.preventDefault();
+	        var form = $(this);
+	        var url = "<?php echo $this->getUrl('loginsidebar'); ?>";
+	        $.ajax({
+	            type: "POST",
+	            url: url,
+	            data: form.serialize(),
+	            success: function(data)
+	            {
+	                if(data.success){
+	                	formSubmitted = true;
+	                	$("#login-form").submit();
+	                }else{
+	                	$('.form-login .error-message').first().html(data.message);
+	                }
+	            }
+	        });
+		}
+    });
+});
+</script>
