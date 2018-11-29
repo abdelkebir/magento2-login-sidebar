@@ -1,3 +1,4 @@
+<?php if(!$this->isLoggedIn()){ ?>
 <div id="overlay"></div>
 <div id="sidebar">
 	<ul class="tabs">
@@ -163,6 +164,11 @@ require(['jquery'], function($){
 	  	$('#sidebar').addClass('active');
 	  	$('#overlay').addClass('active');
 	  	$('body').addClass('sidebar-open');
+
+	  	$('.bd-register').hide();
+  		$('.bd-login').show();
+  		$('.bd-forgot').hide();
+  		$('.bd-sent').hide();
 	});
 	$( "#overlay" ).click(function( event ) {
 	  	$('#sidebar').removeClass('active');
@@ -203,6 +209,12 @@ require(['jquery'], function($){
 	  	$('.bd-sent').hide();
 	  	$('.bd-forgot').show();
 	});
+	
+	$( ".bd-sent button" ).click(function( event ) {
+	  	$('#sidebar').removeClass('active');
+	  	$('#overlay').removeClass('active');
+	  	$('body').removeClass('sidebar-open');
+	});
 	$("#login-form").submit(function(e) {
 		if(formSubmitted){
 		} else {
@@ -237,15 +249,22 @@ require(['jquery'], function($){
 	            data: form.serialize(),
 	            success: function(data)
 	            {
+	            	console.log(data);
 	                if(data.success){
 	                	formForgotSubmitted = true;
-	                	$("#form-validate").submit();
+	                	$('.bd-forgot').hide();
+	                	$('.bd-sent').show();
 	                }else{
 	                	$('#form-validate .error-message').first().html(data.message);
 	                }
-	            }
+	            },
+			    error: function (xhr, status, errorThrown) {
+			    	console.log(xhr.status);
+			        console.log(xhr.responseText);
+			    }
 	        });
 		}
     });
 });
 </script>
+<?php } ?>
