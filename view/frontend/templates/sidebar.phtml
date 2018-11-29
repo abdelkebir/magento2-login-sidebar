@@ -13,6 +13,16 @@
 	<div class="bd-forgot">
 		<?php  echo $this->getChildHtml('customer_forgot'); ?>
 	</div>
+	<div class="bd-sent">
+        <div class="success-message">
+            <svg enable-background="new 0 0 32 32" version="1.1" viewBox="0 0 32 32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path clip-rule="evenodd" d="M27.704,8.397c-0.394-0.391-1.034-0.391-1.428,0  L11.988,22.59l-6.282-6.193c-0.394-0.391-1.034-0.391-1.428,0c-0.394,0.391-0.394,1.024,0,1.414l6.999,6.899  c0.39,0.386,1.039,0.386,1.429,0L27.704,9.811C28.099,9.421,28.099,8.787,27.704,8.397C27.31,8.006,28.099,8.787,27.704,8.397z"/><g/><g/><g/><g/><g/><g/></svg>
+            <div>
+            	<p>Link Sent</p>
+            	<p>Please check your email</p>
+            </div>
+        </div>
+        <button class="button default">Close</button>
+    </div>
 </div>
 <style type="text/css">
 #sidebar {
@@ -93,6 +103,31 @@
 	padding: 20px;
 	display: none;
 }
+#sidebar .bd-sent {
+	padding: 20px;
+}
+#sidebar .bd-sent{
+	padding: 20px;
+	display: none;
+}
+#sidebar .bd-sent.active{
+	display: block;
+}
+#sidebar .bd-sent .success-message {
+	text-align: center;
+	color: #00a14b;
+}
+#sidebar .bd-sent .success-message svg {
+	font-size: 20px;
+	width: 100px;
+	height: 100px;
+	border: 2px solid #00a14b;
+	fill: #00a14b;
+	border-radius: 54px;
+}
+#sidebar .bd-sent .success-message div{
+	
+}
 #sidebar .bd-forgot.active{
 	display: block;
 }
@@ -122,6 +157,7 @@ body.sidebar-open {
 <script type="text/javascript">
 require(['jquery'], function($){
 	var formSubmitted = false;
+	var formForgotSubmitted = false;
   	$( ".authorization-link a" ).click(function( event ) {
 	  	event.preventDefault();
 	  	$('#sidebar').addClass('active');
@@ -143,6 +179,7 @@ require(['jquery'], function($){
 	  		$('.bd-register').show();
 	  		$('.bd-login').hide();
 	  		$('.bd-forgot').hide();
+	  		$('.bd-sent').hide();
 	  	}
 	});
 	$("#sidebar .tab-login").click(function( event ) {
@@ -154,6 +191,7 @@ require(['jquery'], function($){
 	  		$('.bd-login').show();
 	  		$('.bd-register').hide();
 	  		$('.bd-forgot').hide();
+	  		$('.bd-sent').hide();
 	  	}
 	});
 	$( ".actions-toolbar .secondary a.action.remind" ).click(function( event ) {
@@ -162,6 +200,7 @@ require(['jquery'], function($){
 	  	$("#sidebar .tab-login").removeClass('active');
 	  	$('.bd-register').hide();
 	  	$('.bd-login').hide();
+	  	$('.bd-sent').hide();
 	  	$('.bd-forgot').show();
 	});
 	$("#login-form").submit(function(e) {
@@ -181,6 +220,28 @@ require(['jquery'], function($){
 	                	$("#login-form").submit();
 	                }else{
 	                	$('.form-login .error-message').first().html(data.message);
+	                }
+	            }
+	        });
+		}
+    });
+    $("#form-validate").submit(function(e) {
+		if(formForgotSubmitted){
+		} else {
+			e.preventDefault();
+	        var form = $(this);
+	        var url = "<?php echo $this->getUrl('loginsidebar/index/forgot'); ?>";
+	        $.ajax({
+	            type: "POST",
+	            url: url,
+	            data: form.serialize(),
+	            success: function(data)
+	            {
+	                if(data.success){
+	                	formForgotSubmitted = true;
+	                	$("#form-validate").submit();
+	                }else{
+	                	$('#form-validate .error-message').first().html(data.message);
 	                }
 	            }
 	        });

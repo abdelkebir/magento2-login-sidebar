@@ -4,6 +4,7 @@
       data-mage-init='{"validation":{}}'>
     <fieldset class="fieldset" data-hasrequired="<?= $block->escapeHtmlAttr(__('* Required Fields')) ?>">
         <div class="field note"><?= $block->escapeHtml(__('Please enter your email address below to receive a password reset link.')) ?></div>
+        <div class="error-message"></div>
         <div class="field email required">
             <label for="email_address" class="label"><span><?= $block->escapeHtml(__('Email')) ?></span></label>
             <div class="control">
@@ -15,9 +16,6 @@
     <div class="actions-toolbar">
         <div class="primary">
             <button type="submit" class="action submit primary"><span><?= $block->escapeHtml(__('Reset My Password')) ?></span></button>
-        </div>
-        <div class="secondary">
-            <a class="action back" href="<?= $block->escapeUrl($block->getLoginUrl()) ?>"><span><?= $block->escapeHtml(__('Go back')) ?></span></a>
         </div>
     </div>
 </form>
