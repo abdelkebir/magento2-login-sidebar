@@ -1,13 +1,22 @@
 <?php if ($block->getRegistration()->isAllowed()): ?>
 <div class="block block-new-customer">
     <div class="block-title">
-        <strong id="block-new-customer-heading" role="heading" aria-level="2"><?= $block->escapeHtml(__('New Customers')) ?></strong>
+        <strong id="block-new-customer-heading" role="heading" aria-level="2"><?= $block->escapeHtml(__('Register for Propmasters.net')) ?></strong>
     </div>
     <div class="block-content" aria-labelledby="block-new-customer-heading">
-        <p><?= $block->escapeHtml(__('Creating an account has many benefits: check out faster, keep more than one address, track orders and more.')) ?></p>
+        <p><?= $block->escapeHtml(__('Create your account NOW to activate features to include:')) ?></p>
+        <ul class="check">
+            <li> <?= $block->escapeHtml(__('View Prices')) ?></li>
+            <li> <?= $block->escapeHtml(__('Enlarge Images')) ?></li>
+            <li> <?= $block->escapeHtml(__('Place and Track Orders')) ?></li>
+            <li> <?= $block->escapeHtml(__('Receive Exclusive Updates and Offers')) ?></li>
+            <li> <?= $block->escapeHtml(__('Bid On Auction Listings')) ?></li>
+            <li> <?= $block->escapeHtml(__('Faciliate Payment Plans')) ?></li>
+            <li> <?= $block->escapeHtml(__('Organise Wish and Wants Lists')) ?></li>
+    </ul>
         <div class="actions-toolbar">
             <div class="primary">
-                <a href="<?= $block->escapeUrl($block->getCreateAccountUrl()) ?>" class="action create primary"><span><?= $block->escapeHtml(__('Create an Account')) ?></span></a>
+                <a href="<?= $block->escapeUrl($block->getCreateAccountUrl()) ?>" class="action create primary"><span><?= $block->escapeHtml(__('Register now')) ?></span></a>
             </div>
         </div>
     </div>

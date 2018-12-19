@@ -30,7 +30,7 @@
 	position: fixed;
 	width: 300px;
 	z-index: 1000000;
-	background-color: #ededed;
+	/*background-color: #ededed;*/
 	right: -300px;
 	height: 100%;
 	-webkit-transition: all 0.5s ease;
@@ -142,6 +142,7 @@
 	background-color: #3b95c7;
 	color: white;
 	border-radius: 3px;
+	width:100%;
 }
 #sidebar .fieldset > .field:not(.choice) > .label, #sidebar .fieldset > .field:not(.choice) > .control {
 	width: unset;
@@ -154,6 +155,22 @@
 body.sidebar-open {
 	overflow: hidden;
 }
+
+ul.check {
+  list-style: none;
+}
+
+ul.check li:before {
+  content: '✓';
+}
+.bd-register .block-title,
+.form-login .actions-toolbar .primary,
+.form-login .actions-toolbar .secondary {padding-bottom:15px;}
+#block-new-customer-heading {text-decoration:underline;}
+
+.form-login .actions-toolbar .primary,
+.form-login .actions-toolbar .secondary {width:100%;}
+
 </style>
 <script type="text/javascript">
 require(['jquery'], function($){
