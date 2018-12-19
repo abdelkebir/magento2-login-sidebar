@@ -11,6 +11,7 @@ use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Framework\Exception\LocalizedException;
+use Godogi\LoginSidebar\Helper\Data as CustomCooike;
 
 class Index extends \Magento\Framework\App\Action\Action
 {
@@ -19,21 +20,74 @@ class Index extends \Magento\Framework\App\Action\Action
     protected $resultJsonFactory;
     protected $customerAccountManagement;
 
+    private $getCookiedata;
+    private $cookieMetadataManager;
+    private $cookieMetadataFactory;
+
     public function __construct(
             Context $context, 
             Session $customerSession,
             Validator $formKeyValidator,
             JsonFactory $resultJsonFactory,
             AccountManagementInterface $customerAccountManagement,
-            CustomerUrl $customerHelperData)
+            CustomerUrl $customerHelperData,
+            CustomCooike $getCookiedata)
     {
         $this->session = $customerSession;
         $this->formKeyValidator = $formKeyValidator;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->customerUrl = $customerHelperData;
+        $this->getCookiedata = $getCookiedata;
         parent::__construct($context);
     }
+    /**
+    * Get scope config
+    *
+    * @return ScopeConfigInterface
+    * @deprecated
+    */
+    private function getScopeConfig()
+    {
+        if (!($this->scopeConfig instanceof \Magento\Framework\App\Config\ScopeConfigInterface)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(
+               \Magento\Framework\App\Config\ScopeConfigInterface::class
+            );
+        } else {
+            return $this->scopeConfig;
+        }
+    }
+    /**
+    * Retrieve cookie manager
+    *
+    * @deprecated
+    * @return \Magento\Framework\Stdlib\Cookie\PhpCookieManager
+    */
+    private function getCookieManager()
+    {
+        if (!$this->cookieMetadataManager) {
+            $this->cookieMetadataManager = \Magento\Framework\App\ObjectManager::getInstance()->get(
+               \Magento\Framework\Stdlib\Cookie\PhpCookieManager::class
+            );
+        }
+        return $this->cookieMetadataManager;
+    }
+    /**
+    * Retrieve cookie metadata factory
+    *
+    * @deprecated
+    * @return \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+    */
+    private function getCookieMetadataFactory()
+    {
+        if (!$this->cookieMetadataFactory) {
+            $this->cookieMetadataFactory = \Magento\Framework\App\ObjectManager::getInstance()->get(
+               \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class
+            );
+        }
+        return $this->cookieMetadataFactory;
+    }
+
     public function execute()
     {
         if (!$this->formKeyValidator->validate($this->getRequest())) {
@@ -45,7 +99,28 @@ class Index extends \Magento\Framework\App\Action\Action
             $login = $this->getRequest()->getPost('login');
             if (!empty($login['username']) && !empty($login['password'])) {
                 try {
+                    if (array_key_exists('rememberme',$login)) {
+                        $logindetails = array('username' => $login['username'], 'password' => $login['password'], 'remchkbox' => 1);
+                        $logindetails = json_encode($logindetails);
+                        $this->getCookiedata->set($logindetails, $this->getCookiedata->getCookielifetime());
+                    } else {
+                        $this->getCookiedata->delete('remember');
+                    }
+
+
+
+
+
                     $customer = $this->customerAccountManagement->authenticate($login['username'], $login['password']);
+                    
+                    $this->session->setCustomerDataAsLoggedIn($customer);
+                    $this->session->regenerateId();
+                    if ($this->getCookieManager()->getCookie('mage-cache-sessid')) {
+                        $metadata = $this->getCookieMetadataFactory()->createCookieMetadata();
+                        $metadata->setPath('/');
+                        $this->getCookieManager()->deleteCookie('mage-cache-sessid', $metadata);
+                    }
+
                     $result = $this->resultJsonFactory->create();
                     $result->setData(['success' => true, 'message' => 'Customer exist.']);
                     return $result;
@@ -57,6 +132,7 @@ class Index extends \Magento\Framework\App\Action\Action
                     );
                     $result = $this->resultJsonFactory->create();
                     $result->setData(['success' => false, 'message' => $message]);
+                    $this->session->setUsername($login['username']);
                     return $result;
                 } catch (UserLockedException $e) {
                     $message = __(
@@ -64,19 +140,23 @@ class Index extends \Magento\Framework\App\Action\Action
                     );
                     $result = $this->resultJsonFactory->create();
                     $result->setData(['success' => false, 'message' => $message]);
+                    $this->session->setUsername($login['username']);
                     return $result;
                 } catch (AuthenticationException $e) {
                     $message = __('You did not sign in correctly or your account is temporarily disabled.');
                     $result = $this->resultJsonFactory->create();
                     $result->setData(['success' => false, 'message' => $message]);
+                    $this->session->setUsername($login['username']);
                     return $result;
                 } catch (LocalizedException $e) {
                     $message = $e->getMessage();
                     $result = $this->resultJsonFactory->create();
                     $result->setData(['success' => false, 'message' => $message]);
+                    $this->session->setUsername($login['username']);
                     return $result;
                 } catch (\Exception $e) {
                     $message = __('An unspecified error occurred. Please contact us for assistance.');
+                    $message = $e->getMessage();
                     $result = $this->resultJsonFactory->create();
                     $result->setData(['success' => false, 'message' => $message]);
                     return $result;
