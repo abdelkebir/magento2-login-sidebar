@@ -29,7 +29,7 @@ class Forgot extends \Magento\Framework\App\Action\Action
     {
         $email = (string)$this->getRequest()->getPost('email');
         if ($email) {
-            if (!\Zend_Validate::is($email, \Magento\Framework\Validator\EmailAddress::class)) {
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $result = $this->resultJsonFactory->create();
                 $result->setData(['success' => false, 'message' => 'Please correct the email address.']);
                 return $result;
