@@ -36,6 +36,7 @@ $_helper = $this->helper('Godogi\LoginSidebar\Helper\Data');
                 <div class="actions-toolbar">
                     <div class="primary"><button type="submit" class="action login primary" name="send" id="send2"><span><?= $block->escapeHtml(__('Sign In')) ?></span></button></div>
                     <div class="secondary"><a class="action remind" href="<?= $block->escapeUrl($block->getForgotPasswordUrl()) ?>"><span><?= $block->escapeHtml(__('Forgot Password?')) ?></span></a></div>
+                    <div class="secondary"><a class="action cancel" href="#"><span><?= $block->escapeHtml(__('Cancel')) ?></span></a></div>
                     <hr>
                     <div class="secondary"><a class="action create" href="customer/account/create/"><p><?= $block->escapeHtml(__("Don't have an account?")) ?> <strong>Sign up</strong></p></a></div>
                 </div> 

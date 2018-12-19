@@ -169,8 +169,20 @@ ul.check li:before {
 #block-new-customer-heading {text-decoration:underline;}
 
 .form-login .actions-toolbar .primary,
-.form-login .actions-toolbar .secondary {width:100%;}
-
+.form-login .actions-toolbar .secondary,
+.block-new-customer .actions-toolbar .primary,
+.block-new-customer .actions-toolbar .secondary {width:100%;}
+#sidebar .field.rememberme .control {
+	display: inline-block;
+	position: relative;
+	top: 2px;
+}
+.block-new-customer ul.check {
+	padding-left: 0px;
+}
+.block-new-customer .primary{
+	margin-bottom: 15px;
+}
 </style>
 <script type="text/javascript">
 require(['jquery'], function($){
@@ -188,6 +200,11 @@ require(['jquery'], function($){
   		$('.bd-sent').hide();
 	});
 	$( "#overlay" ).click(function( event ) {
+	  	$('#sidebar').removeClass('active');
+	  	$('#overlay').removeClass('active');
+	  	$('body').removeClass('sidebar-open');
+	});
+	$( "#sidebar .cancel" ).click(function( event ) {
 	  	$('#sidebar').removeClass('active');
 	  	$('#overlay').removeClass('active');
 	  	$('body').removeClass('sidebar-open');
