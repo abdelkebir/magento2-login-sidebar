@@ -14,8 +14,6 @@ Magento 2 Login Sidebar
 
 4. bin/magento setup:di:compile
 
-If using OpCache, please clear cache.
-
 
 ## Compatibility
 
