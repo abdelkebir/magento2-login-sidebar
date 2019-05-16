@@ -2,8 +2,6 @@
 
 Magento 2 Login Sidebar
 
-![](preview.gif)
-
 ## Install
 
 1. Go to [Magento2 root folder]/app/code.
